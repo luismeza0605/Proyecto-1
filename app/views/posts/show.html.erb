@@ -1,0 +1,69 @@
+<%# Mostrar las imágenes del post %>
+<% if @post.images.attached? %>
+  <div class="image-container mb-3 text-center">
+    <% @post.images.each do |image| %> <!-- Itera sobre todas las imágenes -->
+      <%= image_tag(image, class: "post-image img-fluid", data: { toggle: "modal", target: "#imageModal", image_url: url_for(image) }) %>
+    <% end %>
+  </div>
+<% else %>
+  <p class="no-image text-muted text-center">No image available</p>
+<% end %>
+
+<%# Modal para mostrar la imagen en tamaño grande %>
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Imagen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Aquí se cargará la imagen según la que se haya clickeado -->
+        <img id="modal-image" class="img-fluid w-100" src="" alt="Imagen">
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# Mostrar descripción del post %>
+<p class="post-description text-center" style="font-size: 1.1rem; color: #555;"><%= @post.description %></p>
+
+<%# Mostrar el correo del usuario que creó el post %>
+<div class="col-12">
+  <p class="post-owner-email text-center text-muted" style="font-size: 1rem;">Email: <%= @post.user.email %></p>
+</div>
+
+<%# Botones para editar, eliminar o ver el post %>
+<div class="post-links text-center mt-3">
+  <% if @post.user == current_user %>
+    <div class="d-flex flex-column align-items-center gap-3">
+      <%= button_to "Destroy", @post, method: :delete, data: { confirm: "¿Estás seguro de que quieres eliminar este post?" }, class: "btn btn-danger btn-sm" %>
+      <%= link_to "Edit", edit_post_path(@post), class: "btn btn-warning btn-sm" %>
+    </div>
+  <% end %>
+  <%= link_to "Show", @post, class: "btn btn-info btn-sm mt-3" %> <!-- Botón Show con margen superior -->
+</div>
+
+<%# Botón para regresar a la lista de publicaciones %>
+<div class="text-center mt-3">
+  <%= link_to "Regresar a todas las publicaciones", posts_path, class: "btn btn-secondary btn-sm" %>
+</div>
+
+<%# Script para mostrar la imagen en el modal %>
+<script>
+  document.querySelectorAll('.post-image').forEach(function(imgElement) {
+    imgElement.addEventListener('click', function () {
+      var imageUrl = this.getAttribute('data-image-url');
+      console.log('Imagen URL:', imageUrl);  // Verifica la URL en la consola
+
+      // Verifica que el URL no esté vacío
+      if (imageUrl) {
+        var modalImage = document.getElementById('modal-image');
+        modalImage.src = imageUrl;  // Asigna la URL de la imagen al src del modal
+        console.log('Imagen cargada:', modalImage.src);  // Verifica la URL en el modal
+      } else {
+        console.error('No se pudo cargar la imagen: URL vacía');
+      }
+    });
+  });
+</script>
