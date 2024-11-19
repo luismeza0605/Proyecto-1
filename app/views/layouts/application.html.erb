@@ -12,45 +12,116 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        body {
-            padding-top: 56px;
-            background-color: #f8f9fa;
+        /* Estilo general */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
         }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        /* Navbar personalizada */
         .navbar {
-            background-color: #343a40;
+            background-color: #ff69b4; /* Color rosado */
         }
-        .navbar-brand, .nav-link {
-            color: #ffffff !important;
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important;
         }
-        .navbar .nav-item .nav-link:hover {
-            color: #adb5bd !important;
+        .navbar-nav {
+            display: flex;
+            align-items: center; /* Alinea los elementos verticalmente */
         }
-        /* Botón de Logout estilo link */
-        .logout-link {
-            color: #ffffff !important;
-            border: none;
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            text-transform: uppercase;
+            padding: 0.5rem 1rem;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffce00 !important;
+        }
+        .navbar-toggler-icon {
+            background-color: #ffce00;
+        }
+
+        /* Ajuste específico para el botón de logout */
+        .logout-button {
             background: none;
-            padding: 0;
-            font: inherit;
+            border: none;
+            color: #fff !important;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 0.5rem 1rem; /* Igual que los demás enlaces */
             cursor: pointer;
-            outline: inherit;
+            text-decoration: none;
+        }
+        .logout-button:hover {
+            color: #ffce00 !important;
+        }
+
+        /* Estilo de formulario de usuario */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .form-container h2 {
+            color: #ff69b4;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            color: #333;
+        }
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ff69b4;
+        }
+        .btn-primary {
+            background-color: #ff69b4;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #e05599;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #222;
+            color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">Instagram</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto align-items-center">
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><%= link_to "New Post", new_post_path, class: "nav-link" %></li>
                     <% if current_user %>
                         <li class="nav-item">
-                            <%= button_to "Logout", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" }, class: "logout-link nav-link" %>
+                            <%= button_to "Logout", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" }, class: "logout-button nav-link" %>
                         </li>
                     <% else %>
                         <li class="nav-item"><%= link_to "Login", new_user_session_path, class: "nav-link" %></li>
@@ -65,7 +136,7 @@
     </nav>
 
     <!-- Page Content -->
-    <div class="container mt-5">
+    <div class="container">
         <% flash.each do |type, message| %>
             <div class="alert alert-<%= type %> alert-dismissible fade show" role="alert">
                 <%= message %>
@@ -75,9 +146,15 @@
             </div>
         <% end %>
 
-        <div class="text-center">
+        <!-- Formulario de usuario centrado -->
+        <div class="form-container">
             <%= yield %>
         </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Instagram Clone - All Rights Reserved</p>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
